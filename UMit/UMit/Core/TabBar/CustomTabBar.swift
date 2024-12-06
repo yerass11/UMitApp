@@ -14,6 +14,7 @@ struct CustomTabBar: View {
         HStack {
             ForEach(tabItems) { item in
                 Spacer()
+                
                 Image(systemName: item.iconName)
                     .font(.title2)
                     .symbolVariant(selectedTab == item.tab ? .fill : .none)
