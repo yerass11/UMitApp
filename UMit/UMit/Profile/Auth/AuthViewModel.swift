@@ -1,13 +1,15 @@
-import Foundation
 import FirebaseAuth
 import Combine
 
 final class AuthViewModel: ObservableObject {
-    @Published var user: User?         // Храним авторизованного пользователя
+    @Published var user: FirebaseAuth.User?
     @Published var errorMessage: String?
     @Published var isLoading: Bool = false
 
-    // Вход в систему
+    init() {
+        self.user = Auth.auth().currentUser // <--- ВОТ ЭТО ДОБАВЬ
+    }
+
     func signIn(email: String, password: String) {
         isLoading = true
         AuthService.shared.signIn(email: email, password: password) { [weak self] result in
@@ -22,8 +24,7 @@ final class AuthViewModel: ObservableObject {
             }
         }
     }
-    
-    // Регистрация нового пользователя
+
     func signUp(email: String, password: String, fullName: String) {
         isLoading = true
         AuthService.shared.signUp(email: email, password: password, fullName: fullName) { [weak self] result in
@@ -38,8 +39,7 @@ final class AuthViewModel: ObservableObject {
             }
         }
     }
-    
-    // Выход из системы
+
     func signOut() {
         do {
             try AuthService.shared.signOut()
