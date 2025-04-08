@@ -13,12 +13,14 @@ struct ContentView: View {
                     switch selectedTab {
                     case .home:
                         HomeView(viewModel: viewModel, showTab: $showTab)
+                            .environmentObject(viewModel)
                     case .message:
                         HomeView(viewModel: viewModel, showTab: $showTab)
                     case .pharmacy:
                         HomeView(viewModel: viewModel, showTab: $showTab)
                     case .profile:
                         ProfileView()
+                            .environmentObject(viewModel)
                     }
                 }
                 .overlay(alignment: .bottom) {
