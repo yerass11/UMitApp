@@ -49,7 +49,7 @@ struct HomeView: View {
         }
         .sheet(item: $appointmentToEdit) { appointment in
             EditAppointmentView(appointment: appointment) {
-                fetchAppointments() // обновим список после редактирования
+                fetchAppointments()
             }
         }
     }
@@ -232,7 +232,6 @@ struct HomeView: View {
                 print("❌ Failed to delete: \(error.localizedDescription)")
             } else {
                 print("🗑️ Appointment deleted")
-                // Обновим список
                 fetchAppointments()
             }
         }

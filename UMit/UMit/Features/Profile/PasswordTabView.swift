@@ -15,7 +15,6 @@ struct PasswordTabView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                // Header
                 VStack(spacing: 12) {
                     Image(systemName: "lock.shield.fill")
                         .resizable()
@@ -30,14 +29,12 @@ struct PasswordTabView: View {
                 }
                 .padding(.top, 40)
 
-                // Fields
                 VStack(spacing: 16) {
                     SecureInputField(title: "Current Password", text: $currentPassword)
                     SecureInputField(title: "New Password", text: $newPassword)
                     SecureInputField(title: "Confirm Password", text: $confirmPassword)
                 }
 
-                // Messages
                 if let error = errorMessage {
                     Text(error)
                         .foregroundColor(.red)
@@ -52,7 +49,6 @@ struct PasswordTabView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
-                // Button
                 Button(action: handleChangePassword) {
                     if isUpdating {
                         ProgressView()

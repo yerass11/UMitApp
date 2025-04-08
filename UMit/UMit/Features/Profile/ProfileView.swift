@@ -6,7 +6,6 @@ struct ProfileView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Верхний переключатель
             Picker("Profile Tabs", selection: $selectedTab) {
                 Text("Account").tag(0)
                 Text("Password").tag(1)
@@ -15,7 +14,6 @@ struct ProfileView: View {
             .padding(.horizontal)
             .padding(.top)
 
-            // Свайповые вкладки
             TabView(selection: $selectedTab) {
                 AccountTabView()
                     .environmentObject(viewModel)

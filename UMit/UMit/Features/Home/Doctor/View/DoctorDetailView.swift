@@ -12,7 +12,6 @@ struct DoctorDetailView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            // Фото врача
             AsyncImage(url: URL(string: doctor.imageURL ?? "")) { image in
                 image.resizable()
             } placeholder: {
@@ -52,7 +51,6 @@ struct DoctorDetailView: View {
 
             Spacer()
 
-            // Кнопка записи
             Button {
                 reserveAppointment()
             } label: {
@@ -66,7 +64,6 @@ struct DoctorDetailView: View {
             .padding(.bottom, 24)
             .padding(.horizontal)
 
-            // Ошибка
             if let error = reservationError {
                 Text(error)
                     .foregroundColor(.red)

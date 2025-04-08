@@ -14,7 +14,6 @@ struct LoginView: View {
         VStack(spacing: 32) {
             Spacer()
 
-            // Заголовок
             VStack(alignment: .leading, spacing: 6) {
                 Text(isLoginMode ? "Welcome 👋" : "Create Account")
                     .font(.system(size: 32, weight: .bold))
@@ -27,7 +26,6 @@ struct LoginView: View {
             .offset(y: showContent ? 0 : 20)
             .animation(.easeOut.delay(0.1), value: showContent)
 
-            // Поля ввода
             VStack(spacing: 20) {
                 if !isLoginMode {
                     MinimalTextField(text: $fullName, placeholder: "Full Name", isSecure: false)
@@ -39,7 +37,6 @@ struct LoginView: View {
             .offset(y: showContent ? 0 : 20)
             .animation(.easeOut.delay(0.2), value: showContent)
 
-            // Ошибка
             if let error = viewModel.errorMessage {
                 Text(error)
                     .foregroundColor(.red)
@@ -47,7 +44,6 @@ struct LoginView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            // Кнопка входа/регистрации
             Button(action: {
                 withAnimation {
                     if isLoginMode {
@@ -77,7 +73,6 @@ struct LoginView: View {
             .disabled(viewModel.isLoading)
             .opacity(viewModel.isLoading ? 0.8 : 1)
 
-            // Переключение режима
             HStack(spacing: 4) {
                 Text(isLoginMode ? "Don't have an account?" : "Already have an account?")
                     .foregroundColor(.gray)

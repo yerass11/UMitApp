@@ -7,7 +7,7 @@ final class AuthViewModel: ObservableObject {
     @Published var isLoading: Bool = false
 
     init() {
-        self.user = Auth.auth().currentUser // <--- ВОТ ЭТО ДОБАВЬ
+        self.user = Auth.auth().currentUser
     }
 
     func signIn(email: String, password: String) {
