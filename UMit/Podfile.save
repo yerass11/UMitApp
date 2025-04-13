@@ -1,0 +1,4 @@
+pod 'Firebase/Firestore'
+pod 'FirebaseFirestoreSwift'
+pod intall
+g
