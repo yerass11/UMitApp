@@ -176,6 +176,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				A9ABFC3E2DA4F0E200C49A13 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				9B200C712DAD62D70094A3D7 /* XCRemoteSwiftPackageReference "stripe-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A9023C5C2D802F7900A45DAA /* Products */;
@@ -407,6 +408,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9B200C712DAD62D70094A3D7 /* XCRemoteSwiftPackageReference "stripe-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stripe/stripe-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.11.0;
+			};
+		};
 		A9ABFC3E2DA4F0E200C49A13 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
