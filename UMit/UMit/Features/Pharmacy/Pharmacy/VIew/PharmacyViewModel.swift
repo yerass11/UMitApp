@@ -7,13 +7,14 @@ final class PharmacyViewModel: ObservableObject {
 
     func placeOrder(medicine: Medicine, userId: String, completion: @escaping (Error?) -> Void) {
         let data: [String: Any] = [
-            "userId": userId,
             "medicineId": medicine.id,
             "medicineName": medicine.name,
-            "timestamp": Timestamp(date: Date()),
-            "points": medicine.points
+            "imageURL": medicine.imageURL,
+            "points": medicine.points,
+            "userId": userId,
+            "timestamp": Timestamp(date: Date())
         ]
-
+        
         db.collection("orders").addDocument(data: data, completion: completion)
     }
     

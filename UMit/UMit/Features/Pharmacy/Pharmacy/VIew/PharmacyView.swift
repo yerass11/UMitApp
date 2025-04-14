@@ -3,6 +3,7 @@ import SwiftUI
 struct PharmacyView: View {
     @EnvironmentObject var viewModel: AuthViewModel
     @StateObject private var pharmacyVM = PharmacyViewModel()
+    @StateObject private var paymentVM = PaymentViewModel()
 
     @State private var selectedMedicine: Medicine?
     @State private var showConfirmation = false
@@ -28,9 +29,10 @@ struct PharmacyView: View {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(med.name)
                                         .font(.headline)
+                                        .multilineTextAlignment(.leading)
                                     Text(med.description)
                                         .font(.subheadline)
-                                        .frame(alignment: .leading)
+                                        .multilineTextAlignment(.leading)
                                         .foregroundColor(.gray)
                                 }
 
@@ -49,22 +51,53 @@ struct PharmacyView: View {
                 .padding()
             }
             .navigationTitle("Pharmacy")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        OrderHistoryView()
+                            .environmentObject(viewModel)
+                    } label: {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .imageScale(.large)
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
             .onAppear {
                 pharmacyVM.fetchMedicines()
             }
             .alert("Confirm Order", isPresented: $showConfirmation) {
                 Button("Confirm") {
-                    if let med = selectedMedicine,
-                       let userId = viewModel.user?.uid {
-                        pharmacyVM.placeOrder(medicine: med, userId: userId) { error in
-                            if let error = error {
-                                print("❌ Error placing order:", error.localizedDescription)
-                            } else {
-                                print("✅ Order placed")
+                    guard let med = selectedMedicine,
+                          let userId = viewModel.user?.uid else { return }
+
+                    // 1. Запрашиваем client_secret у backend, передавая цену
+                    paymentVM.fetchPaymentIntent(amount: med.points * 100) { success in
+                        if success {
+                            // 2. Показываем Stripe PaymentSheet
+                            paymentVM.presentPaymentSheet { result in
+                                switch result {
+                                case .completed:
+                                    // 3. После успешной оплаты — создаём заказ
+                                    pharmacyVM.placeOrder(medicine: med, userId: userId) { error in
+                                        if let error = error {
+                                            print("❌ Error placing order:", error.localizedDescription)
+                                        } else {
+                                            print("✅ Order placed")
+                                        }
+                                    }
+                                case .canceled:
+                                    print("⚠️ Payment canceled")
+                                case .failed(let error):
+                                    print("❌ Payment failed:", error.localizedDescription)
+                                }
                             }
+                        } else {
+                            print("❌ Failed to prepare Stripe Payment")
                         }
                     }
                 }
+
                 Button("Cancel", role: .cancel) { }
             } message: {
                 if let med = selectedMedicine {
