@@ -9,6 +9,8 @@ struct DoctorDetailView: View {
     @State private var reservationSuccess = false
     @State private var reservationError: String?
     @State private var selectedDate = Date()
+    @StateObject var reviewsVM = ReviewViewModel()
+    @State private var showReviewForm = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -36,6 +38,21 @@ struct DoctorDetailView: View {
                 Text("Clinic: \(doctor.clinic)")
                     .font(.subheadline)
                     .foregroundColor(.gray)
+            }
+            
+            VStack {
+                ReviewsSectionView(viewModel: reviewsVM)
+
+                Button("Оставить отзыв") {
+                    showReviewForm = true
+                }
+                .sheet(isPresented: $showReviewForm) {
+                    ReviewFormView(doctorId: doctor.id)
+                }
+            }
+            .onAppear {
+                print("Fetching reviews for doctorId: \(doctor.id)")
+                reviewsVM.fetchReviews(forDoctorId: doctor.id)
             }
             
             VStack(alignment: .leading, spacing: 8) {

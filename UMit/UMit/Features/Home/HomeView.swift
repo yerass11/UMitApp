@@ -4,8 +4,11 @@ import FirebaseFirestore
 struct HomeView: View {
     @ObservedObject var viewModel: AuthViewModel
     @StateObject private var doctorVM = DoctorsViewModel()
+    @StateObject private var hospitalVM = HospitalsViewModel()
+
     
     @State private var showAllDoctors = false
+    @State private var showAllHospitals = false
     @State private var userAppointments: [Appointment] = []
     @State private var appointmentToEdit: Appointment?
     @State private var showEditSheet = false
@@ -26,6 +29,7 @@ struct HomeView: View {
             servicesInfo
             upcomingAppointments
             clinicSection
+            hospitalSection 
             pharmacySection
             pharmacySection
             pharmacySection
@@ -197,7 +201,30 @@ struct HomeView: View {
             DoctorsListView()
         }
     }
-    
+    var hospitalSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Nearby Hospitals")
+                    .font(.title2.bold())
+
+                Spacer()
+
+                Button("See All") {
+                    showAllHospitals = true
+                }
+                .font(.subheadline)
+            }
+            .padding(.horizontal, 8)
+
+            ForEach(hospitalVM.hospitals.prefix(2)) { hospital in
+                HospitalCard(hospital: hospital, viewModel: viewModel)
+                    .padding(.horizontal, 8)
+            }
+        }
+        .sheet(isPresented: $showAllHospitals) {
+            HospitalsListView()
+        }
+    }    
     
     var pharmacySection: some View {
         ServiceSection(title: "Pharmacy Services", services: [
