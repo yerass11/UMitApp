@@ -9,7 +9,7 @@ struct DoctorDetailView: View {
     @State private var reservationSuccess = false
     @State private var reservationError: String?
     @State private var selectedDate = Date()
-    @StateObject var reviewsVM = ReviewViewModel()
+    @StateObject var reviewViewModel = ReviewViewModel()
     @State private var showReviewForm = false
 
     var body: some View {
@@ -41,7 +41,7 @@ struct DoctorDetailView: View {
             }
             
             VStack {
-                ReviewsSectionView(viewModel: reviewsVM)
+                ReviewsSectionView(viewModel: reviewViewModel)
 
                 Button("Оставить отзыв") {
                     showReviewForm = true
@@ -52,7 +52,7 @@ struct DoctorDetailView: View {
             }
             .onAppear {
                 print("Fetching reviews for doctorId: \(doctor.id)")
-                reviewsVM.fetchReviews(forDoctorId: doctor.id)
+                reviewViewModel.fetchReviews(forDoctorId: doctor.id)
             }
             
             VStack(alignment: .leading, spacing: 8) {

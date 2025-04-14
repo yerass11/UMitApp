@@ -3,9 +3,8 @@ import FirebaseFirestore
 
 struct HomeView: View {
     @ObservedObject var viewModel: AuthViewModel
-    @StateObject private var doctorVM = DoctorsViewModel()
-    @StateObject private var hospitalVM = HospitalsViewModel()
-
+    @StateObject private var doctorsViewModel = DoctorsViewModel()
+    @StateObject private var hospitalsViewModel = HospitalsViewModel()
     
     @State private var showAllDoctors = false
     @State private var showAllHospitals = false
@@ -192,7 +191,7 @@ struct HomeView: View {
             }
             .padding(.horizontal, 8)
             
-            ForEach(doctorVM.doctors.prefix(2)) { doctor in
+            ForEach(doctorsViewModel.doctors.prefix(2)) { doctor in
                 DoctorCard(doctor: doctor, viewModel: viewModel)
                     .padding(.horizontal, 8)
             }
@@ -216,7 +215,7 @@ struct HomeView: View {
             }
             .padding(.horizontal, 8)
 
-            ForEach(hospitalVM.hospitals.prefix(2)) { hospital in
+            ForEach(hospitalsViewModel.hospitals.prefix(2)) { hospital in
                 HospitalCard(hospital: hospital, viewModel: viewModel)
                     .padding(.horizontal, 8)
             }
