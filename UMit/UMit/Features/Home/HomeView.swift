@@ -9,7 +9,6 @@ struct HomeView: View {
     @State private var userAppointments: [Appointment] = []
     @State private var appointmentToEdit: Appointment?
     @State private var showEditSheet = false
-
     @State private var searchText: String = ""
     @FocusState private var isSearchFocused: Bool
     @State private var showSearchMode: Bool = false
