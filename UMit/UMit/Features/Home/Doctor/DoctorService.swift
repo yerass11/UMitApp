@@ -7,6 +7,7 @@ struct Doctor: Identifiable, Codable {
     var experience: Int
     var clinic: String
     var imageURL: String?
+    var rating: Double? 
 }
 
 final class DoctorService {
