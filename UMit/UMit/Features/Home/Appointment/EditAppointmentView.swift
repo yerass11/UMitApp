@@ -82,7 +82,7 @@ struct EditAppointmentView: View {
                 }
                 .padding(.horizontal)
             }
-            .navigationTitle("Edit Appointment")
+            .navigationTitle("Save Appointment")
             .onAppear {
                 fetchBookedSlots()
             }

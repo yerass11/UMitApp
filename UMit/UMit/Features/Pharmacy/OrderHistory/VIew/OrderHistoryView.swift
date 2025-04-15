@@ -12,7 +12,7 @@ struct OrderHistoryView: View {
                     .padding()
             } else {
                 List(historyVM.orders) { order in
-                    HStack {
+                    HStack(spacing: 12) {
                         AsyncImage(url: URL(string: order.imageURL)) { image in
                             image.resizable()
                         } placeholder: {
@@ -20,13 +20,13 @@ struct OrderHistoryView: View {
                         }
                         .frame(width: 60, height: 60)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
-                        
+
                         VStack(alignment: .leading, spacing: 4) {
                             Text(order.medicineName)
                                 .font(.headline)
-                            Text("\(order.points) $")
+                            Text("\(order.quantity) pcs • \(order.points * order.quantity) $")
                                 .font(.subheadline)
-                                .foregroundColor(.blue)
+                                .foregroundColor(.accent)
                             Text(order.timestamp.formatted(date: .abbreviated, time: .shortened))
                                 .font(.caption)
                                 .foregroundColor(.gray)
@@ -34,6 +34,7 @@ struct OrderHistoryView: View {
                         .padding(.vertical, 4)
                     }
                 }
+                .listStyle(PlainListStyle())
             }
         }
         .navigationTitle("Order History")

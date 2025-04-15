@@ -20,6 +20,7 @@ final class MedicineOrderService {
                     guard let name = data["medicineName"] as? String,
                           let imageURL = data["imageURL"] as? String,
                           let points = data["points"] as? Int,
+                          let quantity = data["quantity"] as? Int,
                           let ts = data["timestamp"] as? Timestamp
                     else { return nil }
 
@@ -31,6 +32,7 @@ final class MedicineOrderService {
                         medicineName: name,
                         imageURL: imageURL,
                         points: points,
+                        quantity: quantity,
                         timestamp: ts.dateValue()
                     )
                 }

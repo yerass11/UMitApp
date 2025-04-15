@@ -5,12 +5,13 @@ final class PharmacyViewModel: ObservableObject {
 
     private let db = Firestore.firestore()
 
-    func placeOrder(medicine: Medicine, userId: String, completion: @escaping (Error?) -> Void) {
+    func placeOrder(medicine: Medicine, userId: String, quantity: Int, completion: @escaping (Error?) -> Void) {
         let data: [String: Any] = [
-            "medicineId": medicine.id,
+            "medicineId": medicine.id ?? "",
             "medicineName": medicine.name,
             "imageURL": medicine.imageURL,
             "points": medicine.points,
+            "quantity": quantity,
             "userId": userId,
             "timestamp": Timestamp(date: Date())
         ]

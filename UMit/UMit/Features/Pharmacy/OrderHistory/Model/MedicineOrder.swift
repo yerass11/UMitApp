@@ -6,5 +6,6 @@ struct MedicineOrder: Identifiable {
     var medicineName: String
     var imageURL: String
     var points: Int
+    var quantity: Int
     var timestamp: Date
 }
