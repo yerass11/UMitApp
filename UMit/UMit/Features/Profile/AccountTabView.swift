@@ -8,6 +8,8 @@ struct AccountTabView: View {
     @State private var phone = ""
     @State private var gender = "Man"
     @State private var birthDate = Date()
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         Form {
@@ -31,28 +33,44 @@ struct AccountTabView: View {
                 Button("Save Changes") {
                     saveChanges()
                 }
-                .foregroundColor(.blue)
+                .foregroundColor(.accent)
             }
 
             Section {
                 Button(role: .destructive) {
                     viewModel.signOut()
                 } label: {
-                    HStack {
-                        Spacer()
-                        Text("Sign Out")
-                        Spacer()
-                    }
+                    Text("Log Out")
+                        .frame(alignment: .leading)
                 }
             }
         }
         .onAppear {
             loadData()
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Changes Saved"),
+                  message: Text(alertMessage),
+                  dismissButton: .default(Text("OK")))
+        }
     }
 
     private func loadData() {
-        fullName = viewModel.user?.displayName ?? ""
+        guard let user = viewModel.user else { return }
+        let db = Firestore.firestore()
+        
+        db.collection("users").document(user.uid).getDocument { document, error in
+            if let document = document, document.exists {
+                fullName = document.data()?["fullName"] as? String ?? ""
+                phone = document.data()?["phone"] as? String ?? ""
+                gender = document.data()?["gender"] as? String ?? "Man"
+                if let timestamp = document.data()?["birthDate"] as? Timestamp {
+                    birthDate = timestamp.dateValue()
+                }
+            } else {
+                print("❌ Error loading data: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
     }
 
     private func saveChanges() {
@@ -68,8 +86,12 @@ struct AccountTabView: View {
         ], merge: true) { error in
             if let error = error {
                 print("❌ Error:", error.localizedDescription)
+                alertMessage = "Failed to save changes: \(error.localizedDescription)"
+                showAlert = true
             } else {
                 print("✅ Saved!")
+                alertMessage = "Your changes have been saved successfully."
+                showAlert = true
             }
         }
     }

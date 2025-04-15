@@ -7,12 +7,14 @@ struct ProfileView: View {
     var body: some View {
         VStack(spacing: 0) {
             Picker("Profile Tabs", selection: $selectedTab) {
-                Text("Account").tag(0)
+                Text("Account")
+                    .tag(0)
                 Text("Password").tag(1)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
             .padding(.top)
+            
 
             TabView(selection: $selectedTab) {
                 AccountTabView()
@@ -29,4 +31,9 @@ struct ProfileView: View {
         .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(.inline)
     }
+}
+
+#Preview {
+    ProfileView()
+        .environmentObject(AuthViewModel())
 }

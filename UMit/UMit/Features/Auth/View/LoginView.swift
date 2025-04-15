@@ -17,6 +17,7 @@ struct LoginView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(isLoginMode ? "Welcome 👋" : "Create Account")
                     .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(.accent)
 
                 Text(isLoginMode ? "Login to continue" : "Register to get started")
                     .font(.system(size: 16))
@@ -55,7 +56,7 @@ struct LoginView: View {
             }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.primary)
+                        .fill(Color.accent)
                         .frame(height: 52)
                         .scaleEffect(viewModel.isLoading ? 0.97 : 1.0)
                         .animation(.easeInOut(duration: 0.2), value: viewModel.isLoading)
@@ -85,6 +86,7 @@ struct LoginView: View {
                 } label: {
                     Text(isLoginMode ? "Register" : "Login")
                         .font(.footnote.bold())
+                        .foregroundColor(.accent)
                 }
             }
 

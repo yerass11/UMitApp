@@ -17,7 +17,7 @@ struct ContentView: View {
                     case .message:
                         HomeView(viewModel: viewModel, showTab: $showTab)
                     case .pharmacy:
-                        PharmacyView()
+                        PharmacyView(showTab: $showTab)
                             .environmentObject(viewModel)
                     case .profile:
                         ProfileView()

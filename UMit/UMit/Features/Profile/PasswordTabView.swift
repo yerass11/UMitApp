@@ -20,11 +20,11 @@ struct PasswordTabView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 60, height: 60)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.accent)
 
                     Text("Change your password")
                         .font(.title3.weight(.semibold))
-                        .foregroundColor(.primary)
+                        .foregroundColor(.accent)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.top, 40)
@@ -58,7 +58,7 @@ struct PasswordTabView: View {
                         Text("Update Password")
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color.accent)
                             .foregroundColor(.white)
                             .cornerRadius(12)
                     }
