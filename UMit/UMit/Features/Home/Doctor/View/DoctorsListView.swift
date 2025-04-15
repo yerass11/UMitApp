@@ -1,12 +1,15 @@
 import SwiftUI
 
 struct DoctorsListView: View {
+    let authViewModel: AuthViewModel
+
     @StateObject var viewModel = DoctorsViewModel()
+    @Binding var showTab: Bool
 
     var body: some View {
         NavigationView {
             List(viewModel.doctors) { doctor in
-                NavigationLink(destination: DoctorDetailView(doctor: doctor).environmentObject(viewModel)) {
+                NavigationLink(destination: DoctorDetailView(doctor: doctor, showTab: $showTab).environmentObject(authViewModel)) {
                     HStack {
                         AsyncImage(url: URL(string: doctor.imageURL ?? "")) { image in
                             image.resizable()
@@ -18,7 +21,9 @@ struct DoctorsListView: View {
 
                         VStack(alignment: .leading) {
                             Text(doctor.fullName)
+                                .multilineTextAlignment(.leading)
                                 .font(.headline)
+                                .foregroundColor(.accent)
                             Text(doctor.specialty)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)

@@ -1,16 +1,20 @@
 import SwiftUI
 import FirebaseAuth
+import FirebaseFirestore
 
 struct DoctorDetailView: View {
     let doctor: Doctor
 
     @EnvironmentObject var viewModel: AuthViewModel
+    @Binding var showTab: Bool
 
     @State private var reservationSuccess = false
     @State private var reservationError: String?
-    @State private var selectedDate = Date()
-    @StateObject var reviewViewModel = ReviewViewModel()
     @State private var showReviewForm = false
+    @State private var selectedDate = Date()
+    @State private var selectedHour: Int? = nil
+    @State private var bookedHours: [Int] = []
+    @StateObject var reviewViewModel = ReviewViewModel()
 
     var body: some View {
         VStack(spacing: 24) {
@@ -56,13 +60,41 @@ struct DoctorDetailView: View {
             }
             
             VStack(alignment: .leading, spacing: 8) {
-                Text("Select Date & Time")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+                    Text("Select Date & Time")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
 
-                DatePicker("Appointment Date", selection: $selectedDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
-                    .datePickerStyle(.compact)
-                    .labelsHidden()
+                    DatePicker("Select Date", selection: $selectedDate, in: Date()..., displayedComponents: [.date])
+                        .onChange(of: selectedDate) { _ in
+                            fetchBookedSlots()
+                        }
+                        .labelsHidden()
+
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 12) {
+                    ForEach([10, 11, 12, 14, 15, 16, 17], id: \.self) { hour in
+                        let isBooked = bookedHours.contains(hour)
+                        let isSelected = selectedHour == hour
+                        
+                        Button {
+                            if !isBooked {
+                                selectedHour = hour
+                            }
+                        } label: {
+                            Text("\(hour):00")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(isBooked ? Color.gray.opacity(0.3)
+                                            : isSelected ? Color.blue : Color.white)
+                                .foregroundColor(isBooked ? .gray : isSelected ? .white : .black)
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(isSelected ? Color.blue : Color.gray.opacity(0.3), lineWidth: 1)
+                                )
+                        }
+                        .disabled(isBooked)
+                    }
+                }
             }
             .padding(.horizontal)
 
@@ -96,6 +128,9 @@ struct DoctorDetailView: View {
         } message: {
             Text("You successfully reserved an appointment with \(doctor.fullName).")
         }
+        .onAppear{
+            showTab = false
+        }
     }
 
     // MARK: - Appointment Logic
@@ -106,10 +141,21 @@ struct DoctorDetailView: View {
             return
         }
 
+        guard let hour = selectedHour else {
+            reservationError = "Please select a time slot."
+            return
+        }
+
+        let calendar = Calendar.current
+        guard let dateWithHour = calendar.date(bySettingHour: hour, minute: 0, second: 0, of: selectedDate) else {
+            reservationError = "Invalid time selected."
+            return
+        }
+
         AppointmentService.shared.createAppointment(
             userId: userId,
             doctor: doctor,
-            date: selectedDate
+            date: dateWithHour
         ) { error in
             if let error = error {
                 reservationError = error.localizedDescription
@@ -118,5 +164,24 @@ struct DoctorDetailView: View {
                 reservationError = nil
             }
         }
+    }
+
+    private func fetchBookedSlots() {
+        guard let doctorId = doctor.id else { return }
+
+        Firestore.firestore().collection("appointments")
+            .whereField("doctorId", isEqualTo: doctorId)
+            .getDocuments { snapshot, error in
+                guard let docs = snapshot?.documents else { return }
+                let calendar = Calendar.current
+                let booked = docs.compactMap { doc -> Int? in
+                    guard let timestamp = doc["timestamp"] as? Timestamp else { return nil }
+                    let date = timestamp.dateValue()
+                    return calendar.isDate(date, inSameDayAs: selectedDate)
+                           ? calendar.component(.hour, from: date)
+                           : nil
+                }
+                self.bookedHours = booked
+            }
     }
 }
