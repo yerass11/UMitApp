@@ -119,6 +119,16 @@ struct DoctorDetailView: View {
                     .font(.footnote)
                     .padding(.horizontal)
             }
+            
+            NavigationLink(destination: ChatView(doctor: ChatDoctor(id: 1, doctorFirebaseID: doctor.id!, fullName: doctor.fullName, specialty: doctor.specialty, imageURL: doctor.imageURL), userId: viewModel.user?.uid ?? "")) {
+                Text("Chat with Doctor")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(14)
+            }
+            .padding(.horizontal)
         }
         .padding(.horizontal)
         .navigationTitle("Doctor")

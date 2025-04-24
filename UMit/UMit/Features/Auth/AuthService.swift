@@ -35,11 +35,30 @@ final class AuthService {
                 if let error = error {
                     completion(.failure(error))
                 } else {
+                    self.sendUserToBackend(uid: user.uid, email: email, fullName: fullName)
                     completion(.success(user))
                 }
             }
         }
     }
+    
+    private func sendUserToBackend(uid: String, email: String, fullName: String) {
+            guard let url = URL(string: "http://127.0.0.1:8000/api/register_firebase_user/") else { return }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            let payload: [String: String] = [
+                "uid": uid,
+                "email": email,
+                "full_name": fullName
+            ]
+
+            request.httpBody = try? JSONSerialization.data(withJSONObject: payload)
+
+            URLSession.shared.dataTask(with: request).resume()
+        }
 
     
     func signOut() throws {
