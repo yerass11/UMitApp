@@ -15,10 +15,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct UMitApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject private var authViewModel = AuthViewModel()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(authViewModel)
         }
     }
 }

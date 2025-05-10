@@ -1,16 +1,15 @@
-import SwiftUI
-import FirebaseAuth
 
+import SwiftUI
 struct DoctorDetailView: View {
     let doctor: Doctor
 
     @EnvironmentObject var viewModel: AuthViewModel
-
     @State private var reservationSuccess = false
     @State private var reservationError: String?
     @State private var selectedDate = Date()
     @StateObject var reviewViewModel = ReviewViewModel()
     @State private var showReviewForm = false
+    @State private var isFavorite = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -24,7 +23,6 @@ struct DoctorDetailView: View {
             .shadow(radius: 5)
             .padding(.top, 40)
 
-            // Информация о враче
             VStack(spacing: 6) {
                 Text(doctor.fullName)
                     .font(.title2.weight(.bold))
@@ -38,8 +36,26 @@ struct DoctorDetailView: View {
                 Text("Clinic: \(doctor.clinic)")
                     .font(.subheadline)
                     .foregroundColor(.gray)
+                
+                Button(action: {
+                                if isFavorite {
+                                    removeDoctorFromFavorites(doctorID: doctor.id ?? "")
+                                } else {
+                                    addDoctorToFavorites(doctorID: doctor.id ?? "")
+                                }
+                            }) {
+                                Text(isFavorite ? "Remove from Favorites" : "Add to Favorites")
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(isFavorite ? Color.red : Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(14)
+                            }
+                            .padding(.bottom, 24)
+                            .padding(.horizontal)
             }
-            
+
+            // Оставить отзыв
             VStack {
                 ReviewsSectionView(viewModel: reviewViewModel)
 
@@ -53,8 +69,10 @@ struct DoctorDetailView: View {
             .onAppear {
                 print("Fetching reviews for doctorId: \(doctor.id)")
                 reviewViewModel.fetchReviews(forDoctorId: doctor.id)
+                checkIfDoctorIsFavorite(doctorID: doctor.id ?? "")
             }
-            
+
+            // Выбор даты и времени
             VStack(alignment: .leading, spacing: 8) {
                 Text("Select Date & Time")
                     .font(.subheadline)
@@ -91,6 +109,7 @@ struct DoctorDetailView: View {
         .padding(.horizontal)
         .navigationTitle("Doctor")
         .navigationBarTitleDisplayMode(.inline)
+        
         .alert("Success", isPresented: $reservationSuccess) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -98,8 +117,7 @@ struct DoctorDetailView: View {
         }
     }
 
-    // MARK: - Appointment Logic
-
+    // Логика записи на приём
     private func reserveAppointment() {
         guard let userId = viewModel.user?.uid else {
             reservationError = "You must be logged in to reserve."
@@ -119,4 +137,39 @@ struct DoctorDetailView: View {
             }
         }
     }
+
+    private func addDoctorToFavorites(doctorID: String) {
+            guard let userId = viewModel.user?.uid else { return }
+            
+            DoctorService.shared.addDoctorToFavorites(userID: userId, doctorID: doctorID) { success in
+                if success {
+                    isFavorite = true
+                    print("Doctor added to favorites.")
+                } else {
+                    print("Failed to add doctor to favorites.")
+                }
+            }
+        }
+
+        private func removeDoctorFromFavorites(doctorID: String) {
+            guard let userId = viewModel.user?.uid else { return }
+            
+            DoctorService.shared.removeDoctorFromFavorites(userID: userId, doctorID: doctorID) { success in
+                if success {
+                    isFavorite = false
+                    print("Doctor removed from favorites.")
+                } else {
+                    print("Failed to remove doctor from favorites.")
+                }
+            }
+        }
+
+        // Проверка, является ли врач в избранном
+        private func checkIfDoctorIsFavorite(doctorID: String) {
+            guard let userId = viewModel.user?.uid else { return }
+            
+            DoctorService.shared.checkIfDoctorIsFavorite(userID: userId, doctorID: doctorID) { isFavorite in
+                self.isFavorite = isFavorite
+            }
+        }
 }

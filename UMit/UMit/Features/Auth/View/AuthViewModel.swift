@@ -9,7 +9,9 @@ final class AuthViewModel: ObservableObject {
     init() {
         self.user = Auth.auth().currentUser
     }
-
+    var userID: String? {
+            return user?.uid 
+        }
     func signIn(email: String, password: String) {
         isLoading = true
         AuthService.shared.signIn(email: email, password: password) { [weak self] result in
