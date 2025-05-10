@@ -5,7 +5,7 @@ class WebSocketManager: ObservableObject {
     var onMessageReceived: ((ChatMessage) -> Void)?
     
     func connect(room: String, senderId: String, token: String) {
-        let urlString = "ws://127.0.0.1:8000/ws/chat/\(room)/?token=\(token)"
+        let urlString = "ws://127.0.0.1:8000/ws/chat/\(room)/?token=\(senderId)"
         guard let url = URL(string: urlString) else {
             print("❌ Invalid WebSocket URL")
             return
@@ -26,12 +26,13 @@ class WebSocketManager: ObservableObject {
             "receiver_id": receiverId
         ]
         
-        guard let data = try? JSONSerialization.data(withJSONObject: payload, options: []) else {
-            print("❌ Failed to encode message")
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: []),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            print("❌ Failed to encode message as JSON string")
             return
         }
         
-        let wsMessage = URLSessionWebSocketTask.Message.data(data)
+        let wsMessage = URLSessionWebSocketTask.Message.string(jsonString)
         webSocketTask?.send(wsMessage) { error in
             if let error = error {
                 print("❌ Send error: \(error)")

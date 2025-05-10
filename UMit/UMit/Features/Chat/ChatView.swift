@@ -4,60 +4,88 @@ import FirebaseAuth
 struct ChatView: View {
     let doctor: ChatDoctor
     let userId: String
-
+    
+    @Binding var showTab: Bool
     @State private var messageText: String = ""
     @State private var messages: [ChatMessage] = []
-    @StateObject private var socketManager = WebSocketManager()
     @State private var groupId: Int?
+    @StateObject private var socketManager = WebSocketManager()
 
     var roomId: String {
-        "\(userId)_\(doctor.doctorFirebaseID)"
+        [userId, doctor.doctorFirebaseID].sorted().joined(separator: "_")
     }
 
     var body: some View {
         VStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 10) {
-                    ForEach(messages) { msg in
-                        HStack {
-                            if msg.senderId == userId {
-                                Spacer()
-                                Text(msg.content)
-                                    .padding()
-                                    .background(Color.blue.opacity(0.8))
-                                    .foregroundColor(.white)
-                                    .cornerRadius(12)
-                            } else {
-                                Text(msg.content)
-                                    .padding()
-                                    .background(Color.gray.opacity(0.3))
-                                    .cornerRadius(12)
-                                Spacer()
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(messages) { msg in
+                            HStack {
+                                if msg.senderId == userId {
+                                    Spacer()
+                                    Text(msg.content)
+                                        .padding()
+                                        .background(Color.blue.opacity(0.8))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(12)
+                                } else {
+                                    Text(msg.content)
+                                        .padding()
+                                        .background(Color.gray.opacity(0.3))
+                                        .cornerRadius(12)
+                                    Spacer()
+                                }
                             }
+                            .id(msg.id)
+                        }
+                    }
+                    .padding()
+                }
+                .onChange(of: messages.count) { _ in
+                    if let lastMessage = messages.last {
+                        withAnimation {
+                            scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
                         }
                     }
                 }
-                .padding()
-            }
-
-            HStack {
-                TextField("Message", text: $messageText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-
-                Button(action: {
-                    sendMessage()
-                }) {
-                    Image(systemName: "paperplane.fill")
-                        .foregroundColor(.blue)
-                        .padding()
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        if let lastMessage = messages.last {
+                            scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
+                        }
+                    }
                 }
             }
-            .padding()
+
+            HStack(spacing: 12) {
+                TextField("Type your message...", text: $messageText)
+                    .padding(12)
+                    .background(Color(.systemGray6))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+
+                Button(action: sendMessage) {
+                    Image(systemName: "paperplane.fill")
+                        .foregroundColor(.white)
+                        .padding(12)
+                        .background(messageText.trimmingCharacters(in: .whitespaces).isEmpty ? Color.gray : Color.blue)
+                        .clipShape(Circle())
+                }
+                .disabled(messageText.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(Color.white.ignoresSafeArea(edges: .bottom))
         }
         .navigationTitle("\(doctor.fullName)")
         .onAppear {
+            showTab = false
+
             fetchOrCreateChatGroup()
-            var FireToken: String = ""
             Auth.auth().currentUser?.getIDTokenForcingRefresh(true) { idToken, error in
                 if let error = error {
                     print("Ошибка получения токена: \(error.localizedDescription)")
@@ -73,6 +101,7 @@ struct ChatView: View {
 
             socketManager.onMessageReceived = { message in
                 print("📩 Received:", message.content)
+                messages.append(message)
             }
         }
         .onDisappear {
@@ -88,13 +117,12 @@ struct ChatView: View {
 
         let message = ChatMessage(
             id: UUID().uuidString,
-            senderId: userId,
+            senderId: String(userId),
             content: messageText,
             timestamp: Date()
         )
 
         socketManager.sendMessage(message: message, receiverId: doctor.doctorFirebaseID ?? "")
-        messages.append(message)
         messageText = ""
 
         ChatService.saveMessage(roomId: groupId, message: message)
@@ -152,3 +180,4 @@ struct ChatView: View {
         }.resume()
     }
 }
+

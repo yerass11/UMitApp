@@ -41,14 +41,30 @@
 		A9E38C172DA515F500C325B8 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = A9E38C162DA515F500C325B8 /* FirebaseRemoteConfig */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A926C1AF2DD002B600A00434 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9023C532D802F7900A45DAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9023C5A2D802F7900A45DAA;
+			remoteInfo = UMit;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		A9023C5B2D802F7900A45DAA /* UMit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UMit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A926C1AB2DD002B600A00434 /* UMitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UMitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A9023C5D2D802F7900A45DAA /* UMit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = UMit;
+			sourceTree = "<group>";
+		};
+		A926C1AC2DD002B600A00434 /* UMitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UMitTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -93,6 +109,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A926C1A82DD002B600A00434 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -100,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				A9023C5D2D802F7900A45DAA /* UMit */,
+				A926C1AC2DD002B600A00434 /* UMitTests */,
 				A9E38C182DA5168600C325B8 /* Frameworks */,
 				A9023C5C2D802F7900A45DAA /* Products */,
 			);
@@ -109,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				A9023C5B2D802F7900A45DAA /* UMit.app */,
+				A926C1AB2DD002B600A00434 /* UMitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -177,6 +202,29 @@
 			productReference = A9023C5B2D802F7900A45DAA /* UMit.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A926C1AA2DD002B600A00434 /* UMitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A926C1B12DD002B700A00434 /* Build configuration list for PBXNativeTarget "UMitTests" */;
+			buildPhases = (
+				A926C1A72DD002B600A00434 /* Sources */,
+				A926C1A82DD002B600A00434 /* Frameworks */,
+				A926C1A92DD002B600A00434 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A926C1B02DD002B600A00434 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A926C1AC2DD002B600A00434 /* UMitTests */,
+			);
+			name = UMitTests;
+			packageProductDependencies = (
+			);
+			productName = UMitTests;
+			productReference = A926C1AB2DD002B600A00434 /* UMitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -189,6 +237,10 @@
 				TargetAttributes = {
 					A9023C5A2D802F7900A45DAA = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					A926C1AA2DD002B600A00434 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = A9023C5A2D802F7900A45DAA;
 					};
 				};
 			};
@@ -211,12 +263,20 @@
 			projectRoot = "";
 			targets = (
 				A9023C5A2D802F7900A45DAA /* UMit */,
+				A926C1AA2DD002B600A00434 /* UMitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A9023C592D802F7900A45DAA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A926C1A92DD002B600A00434 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -233,7 +293,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A926C1A72DD002B600A00434 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A926C1B02DD002B600A00434 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9023C5A2D802F7900A45DAA /* UMit */;
+			targetProxy = A926C1AF2DD002B600A00434 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A9023C672D802F7A00A45DAA /* Debug */ = {
@@ -370,6 +445,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -398,6 +474,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -408,6 +485,42 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A926C1B22DD002B700A00434 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y3NJU24AHF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "yerassyl-saiman.UMitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UMit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UMit";
+			};
+			name = Debug;
+		};
+		A926C1B32DD002B700A00434 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y3NJU24AHF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "yerassyl-saiman.UMitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UMit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UMit";
 			};
 			name = Release;
 		};
@@ -428,6 +541,15 @@
 			buildConfigurations = (
 				A9023C6A2D802F7A00A45DAA /* Debug */,
 				A9023C6B2D802F7A00A45DAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A926C1B12DD002B700A00434 /* Build configuration list for PBXNativeTarget "UMitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A926C1B22DD002B700A00434 /* Debug */,
+				A926C1B32DD002B700A00434 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
