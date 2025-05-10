@@ -2,7 +2,7 @@ import Foundation
 import FirebaseAuth
 
 final class AuthService {
-    static let shared = AuthService()  // Синглтон для единой точки доступа
+    static let shared = AuthService()
     private init() {}
     
     func signIn(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {

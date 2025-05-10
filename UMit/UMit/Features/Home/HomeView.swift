@@ -3,11 +3,13 @@ import FirebaseFirestore
 
 struct HomeView: View {
     @ObservedObject var viewModel: AuthViewModel
+    @StateObject private var documentViewModel = DocumentViewModel()
     @StateObject private var doctorsViewModel = DoctorsViewModel()
     @StateObject private var hospitalsViewModel = HospitalsViewModel()
 
     @FocusState private var isSearchFocused: Bool
     @State private var showAllDoctors = false
+    @State private var showAllDocuments = false
     @State private var showAllHospitals = false
     @State private var userAppointments: [Appointment] = []
     @State private var appointmentToEdit: Appointment?
@@ -37,6 +39,7 @@ struct HomeView: View {
                         filteredSearchResults
                     } else {
                         upcomingAppointments
+                        documentsSection
                         clinicSection
                         hospitalSection
                     }
@@ -143,7 +146,7 @@ struct HomeView: View {
             .padding(.horizontal, 8)
             
             let upcoming = userAppointments.filter { $0.timestamp >= Date() }
-
+            
             if upcoming.isEmpty {
                 VStack(spacing: 12) {
                     Text("You have no appointments yet")
@@ -173,6 +176,61 @@ struct HomeView: View {
                     .padding(.horizontal, 8)
                 }
             }
+        }
+    }
+    var documentsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("Available Documents")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(.primary)
+
+                Spacer()
+
+                Button {
+                    showAllDocuments = true
+                } label: {
+                    Label("Show all", systemImage: "chevron.right")
+                        .labelStyle(.titleAndIcon)
+                        .font(.subheadline)
+                        .foregroundStyle(.accent)
+                }
+            }
+            .padding(.horizontal)
+
+            ForEach(documentViewModel.documents.prefix(2)) { document in
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(document.title)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+
+                    Text("Uploaded at \(document.formattedDate)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    if let url = URL(string: document.downloadURL) {
+                        Link("View Document", destination: url)
+                            .font(.caption)
+                            .foregroundStyle(.blue)
+                    }
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color(.systemGray6))
+                )
+                .padding(.horizontal)
+            }
+        }
+        .onAppear {
+            guard let userId = viewModel.user?.uid else {
+                print("❌ userId is nil")
+                return
+            }
+            documentViewModel.fetchDocuments(for: userId)
+        }
+        .sheet(isPresented: $showAllDocuments) {
+            DocumentsListView(viewModel: documentViewModel)
         }
     }
 
@@ -248,6 +306,7 @@ struct HomeView: View {
 
         AppointmentService.shared.fetchAppointments(for: userId) { appointments in
             DispatchQueue.main.async {
+                print("✅ Appointments fetched:", appointments.count)
                 self.userAppointments = appointments
             }
         }
@@ -258,6 +317,33 @@ struct HomeView: View {
             if let error = error {
                 print("❌ Failed to delete: \(error.localizedDescription)")
             } else {
+                guard let url = URL(string: "http://127.0.0.1:8000/api/sessions/\(appointment.id)/") else {
+                    print("❌ Invalid URL")
+                    return
+                }
+
+                var request = URLRequest(url: url)
+                request.httpMethod = "DELETE"
+
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                    if let error = error {
+                        print("❌ Failed to delete: \(error.localizedDescription)")
+                        return
+                    }
+
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        print("❌ Invalid response")
+                        return
+                    }
+
+                    if httpResponse.statusCode == 204 {
+                        DispatchQueue.main.async {
+                            fetchAppointments()
+                        }
+                    } else {
+                        print("❌ Failed with status code: \(httpResponse.statusCode)")
+                    }
+                }.resume()
                 fetchAppointments()
             }
         }
