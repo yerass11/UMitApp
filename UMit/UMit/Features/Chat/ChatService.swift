@@ -47,22 +47,23 @@ class ChatService {
             "group": roomId,
             "sender_id": message.senderId,
             "content": message.content,
-            "timestamp": ISO8601DateFormatter().string(from: message.timestamp)
+            "timestamp": ""
         ]
 
         do {
-            let data = try JSONSerialization.data(withJSONObject: payload, options: [])
-            request.httpBody = data
-
-            URLSession.shared.dataTask(with: request) { _, response, error in
-                if let error = error {
-                    print("Save message error: \(error)")
-                } else {
-                    print("Message saved.")
-                }
-            }.resume()
+//            let data = try JSONSerialization.data(withJSONObject: payload, options: [])
+//            request.httpBody = data
+//
+//            URLSession.shared.dataTask(with: request) { _, response, error in
+//                if let error = error {
+//                    print("Save message error: \(error)")
+//                } else {
+//                    print("Message saved.")
+//                }
+//            }.resume()
         } catch {
             print("Serialization error: \(error)")
         }
     }
 }
+

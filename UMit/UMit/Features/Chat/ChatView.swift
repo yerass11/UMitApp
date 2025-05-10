@@ -11,33 +11,52 @@ struct ChatView: View {
     @State private var groupId: Int?
 
     var roomId: String {
-        "\(userId)_\(doctor.doctorFirebaseID)"
+        [userId, doctor.doctorFirebaseID].sorted().joined(separator: "_")
     }
 
     var body: some View {
         VStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 10) {
-                    ForEach(messages) { msg in
-                        HStack {
-                            if msg.senderId == userId {
-                                Spacer()
-                                Text(msg.content)
-                                    .padding()
-                                    .background(Color.blue.opacity(0.8))
-                                    .foregroundColor(.white)
-                                    .cornerRadius(12)
-                            } else {
-                                Text(msg.content)
-                                    .padding()
-                                    .background(Color.gray.opacity(0.3))
-                                    .cornerRadius(12)
-                                Spacer()
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(messages) { msg in
+                            HStack {
+                                if msg.senderId == userId {
+                                    Spacer()
+                                    Text(msg.content)
+                                        .padding()
+                                        .background(Color.blue.opacity(0.8))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(12)
+                                } else {
+                                    Text(msg.content)
+                                        .padding()
+                                        .background(Color.gray.opacity(0.3))
+                                        .cornerRadius(12)
+                                    Spacer()
+                                }
                             }
+                            .id(msg.id) // 👈 добавь идентификатор
+                        }
+                    }
+                    .padding()
+                }
+                .onChange(of: messages.count) { _ in
+                    // Автоматическая прокрутка вниз
+                    if let lastMessage = messages.last {
+                        withAnimation {
+                            scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
                         }
                     }
                 }
-                .padding()
+                .onAppear {
+                    // Скролл при загрузке
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        if let lastMessage = messages.last {
+                            scrollProxy.scrollTo(lastMessage.id, anchor: .bottom)
+                        }
+                    }
+                }
             }
 
             HStack {
@@ -52,12 +71,12 @@ struct ChatView: View {
                         .padding()
                 }
             }
+            .padding(.bottom, 70)
             .padding()
         }
         .navigationTitle("\(doctor.fullName)")
         .onAppear {
             fetchOrCreateChatGroup()
-            var FireToken: String = ""
             Auth.auth().currentUser?.getIDTokenForcingRefresh(true) { idToken, error in
                 if let error = error {
                     print("Ошибка получения токена: \(error.localizedDescription)")
@@ -73,6 +92,7 @@ struct ChatView: View {
 
             socketManager.onMessageReceived = { message in
                 print("📩 Received:", message.content)
+                messages.append(message)
             }
         }
         .onDisappear {
@@ -88,13 +108,13 @@ struct ChatView: View {
 
         let message = ChatMessage(
             id: UUID().uuidString,
-            senderId: userId,
+            senderId: String(userId),
             content: messageText,
             timestamp: Date()
         )
 
         socketManager.sendMessage(message: message, receiverId: doctor.doctorFirebaseID ?? "")
-        messages.append(message)
+//        messages.append(message)
         messageText = ""
 
         ChatService.saveMessage(roomId: groupId, message: message)
@@ -139,7 +159,6 @@ struct ChatView: View {
 
                             let id = String(dict["id"] as? Int ?? UUID().hashValue)
 
-                            // Парсим timestamp, если он есть
                             var timestamp: Date? = nil
                             if let timestampStr = dict["timestamp"] as? String {
                                 timestamp = ISO8601DateFormatter().date(from: timestampStr)
@@ -153,3 +172,4 @@ struct ChatView: View {
         }.resume()
     }
 }
+
