@@ -24,7 +24,7 @@ struct PharmacyView: View {
                                     selectedMedicine = med
                                     showDetail = true
                                 }
-                        }
+                        }   
                     }
                     .padding()
                     .padding(.bottom, 100)

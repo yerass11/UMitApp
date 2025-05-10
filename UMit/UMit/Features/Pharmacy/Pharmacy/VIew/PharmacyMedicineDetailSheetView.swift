@@ -11,6 +11,7 @@ struct PharmacyMedicineDetailSheetView: View {
     @State private var isProcessing = false
     @State private var showAddedToCart = false
     @State private var imageCache: UIImage?
+    @StateObject private var paymentVM = PaymentViewModel()
     
     private let maxQuantity = 10
     private let minQuantity = 1
@@ -180,16 +181,44 @@ struct PharmacyMedicineDetailSheetView: View {
             }
             .disabled(medicine.isAvailable == false)
 
-            Button(action: buyNow) {
+            Button {
+                isProcessing = true
+                paymentVM.fetchPaymentIntent(amount: medicine.points * quantity * 100) { success in
+                    if success {
+                        paymentVM.presentPaymentSheet { result in
+                            switch result {
+                            case .completed:
+                                PharmacyViewModel().placeOrder(medicine: medicine, userId: userId, quantity: quantity) { error in
+                                    isProcessing = false
+                                    if error == nil {
+                                        onOrderSuccess()
+                                        dismiss()
+                                    }
+                                }
+                            case .canceled:
+                                print("⚠️ Payment canceled")
+                                isProcessing = false
+                            case .failed(let error):
+                                print("❌ Payment failed:", error.localizedDescription)
+                                isProcessing = false
+                            }
+                        }
+                    } else {
+                        print("❌ Failed to prepare Stripe payment")
+                        isProcessing = false
+                    }
+                }
+            } label: {
                 Text(isProcessing ? "Processing..." : "Buy Now")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(isProcessing ? Color.gray : Color.blue)
+                    .background(isProcessing ? Color.gray : Color.accent)
                     .foregroundColor(.white)
                     .cornerRadius(10)
+                    .disabled(isProcessing)
             }
             .disabled(isProcessing || medicine.isAvailable == false)
-
+            
             if showAddedToCart {
                 Text("Added to cart!")
                     .foregroundColor(.green)
