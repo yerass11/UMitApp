@@ -1,10 +1,3 @@
-//
-//  Document.swift
-//  UMit
-//
-//  Created by Yermakhan Kasymzhomart on 10.05.2025.
-//
-
 import Foundation
 
 struct Document: Identifiable, Codable {

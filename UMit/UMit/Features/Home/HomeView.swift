@@ -147,8 +147,6 @@ struct HomeView: View {
             
             let upcoming = userAppointments.filter { $0.timestamp >= Date() }
             
-//            let upcoming = userAppointments
-
             if upcoming.isEmpty {
                 VStack(spacing: 12) {
                     Text("You have no appointments yet")

@@ -1,10 +1,3 @@
-//
-//  DocumentViewModel.swift
-//  UMit
-//
-//  Created by Yermakhan Kasymzhomart on 10.05.2025.
-//
-
 import Foundation
 
 class DocumentViewModel: ObservableObject {

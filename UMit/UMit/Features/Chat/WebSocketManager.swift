@@ -56,7 +56,7 @@ class WebSocketManager: ObservableObject {
                 @unknown default:
                     print("❌ Unknown message format")
                 }
-                self?.listen() // recursive listen
+                self?.listen()
             case .failure(let error):
                 print("❌ Receive error: \(error)")
             }

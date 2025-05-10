@@ -36,6 +36,7 @@ class ChatService {
             }
         }.resume()
     }
+
     static func saveMessage(roomId: Int, message: ChatMessage) {
         guard let url = URL(string: "http://127.0.0.1:8000/api/chat/save/") else { return }
 
@@ -49,21 +50,6 @@ class ChatService {
             "content": message.content,
             "timestamp": ""
         ]
-
-        do {
-//            let data = try JSONSerialization.data(withJSONObject: payload, options: [])
-//            request.httpBody = data
-//
-//            URLSession.shared.dataTask(with: request) { _, response, error in
-//                if let error = error {
-//                    print("Save message error: \(error)")
-//                } else {
-//                    print("Message saved.")
-//                }
-//            }.resume()
-        } catch {
-            print("Serialization error: \(error)")
-        }
     }
 }
 

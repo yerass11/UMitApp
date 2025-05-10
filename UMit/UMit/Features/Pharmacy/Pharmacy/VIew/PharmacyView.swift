@@ -28,7 +28,6 @@ struct PharmacyView: View {
                     .padding(.bottom, 100)
                 }
 
-                // Детальный экран
                 if let selectedMedicine = selectedMedicine {
                     NavigationLink(destination: detailView(for: selectedMedicine),
                                    isActive: $showDetail) {
@@ -37,7 +36,6 @@ struct PharmacyView: View {
                     .hidden()
                 }
 
-                // Скрытые переходы
                 NavigationLink(destination: OrderHistoryView().environmentObject(viewModel),
                                isActive: $showOrders) {
                     EmptyView()

@@ -1,10 +1,3 @@
-//
-//  DocumentsListView.swift
-//  UMit
-//
-//  Created by Yermakhan Kasymzhomart on 10.05.2025.
-//
-
 import SwiftUI
 
 struct DocumentsListView: View {
