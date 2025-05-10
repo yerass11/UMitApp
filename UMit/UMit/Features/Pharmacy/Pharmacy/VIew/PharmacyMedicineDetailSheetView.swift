@@ -89,7 +89,6 @@ struct PharmacyMedicineDetailSheetView: View {
     
     private var medicineInfo: some View {
         VStack(spacing: 16) {
-            // Category
             if let category = medicine.category {
                 InfoRow(
                     icon: "tag.fill",
@@ -99,7 +98,6 @@ struct PharmacyMedicineDetailSheetView: View {
                 )
             }
             
-            // Prescription Requirement
             if let requiresPrescription = medicine.isPrescriptionRequired {
                 InfoRow(
                     icon: requiresPrescription ? "doc.text.fill" : "doc.text",
@@ -109,7 +107,6 @@ struct PharmacyMedicineDetailSheetView: View {
                 )
             }
             
-            // Availability
             if let isAvailable = medicine.isAvailable {
                 InfoRow(
                     icon: isAvailable ? "checkmark.circle.fill" : "xmark.circle.fill",
@@ -228,8 +225,6 @@ struct PharmacyMedicineDetailSheetView: View {
         }
     }
     
-    // MARK: - Actions
-    
     private func incrementQuantity() {
         guard quantity < maxQuantity else { return }
         quantity += 1
@@ -264,7 +259,6 @@ struct PharmacyMedicineDetailSheetView: View {
     }
 }
 
-// MARK: - Supporting Views
 struct InfoRow: View {
     let icon: String
     let title: String
@@ -289,7 +283,6 @@ struct InfoRow: View {
     }
 }
 
-// MARK: - Image Extension
 extension Image {
     func asUIImage() -> UIImage? {
         let controller = UIHostingController(rootView: self)

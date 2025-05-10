@@ -6,7 +6,6 @@ struct OrderDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Order Items List
                 VStack(spacing: 16) {
                     ForEach(order.items, id: \.medicineId) { item in
                         HStack(spacing: 12) {
@@ -36,7 +35,6 @@ struct OrderDetailView: View {
                     }
                 }
                 
-                // Order Summary Card
                 VStack(spacing: 16) {
                     InfoRow(
                         icon: "number.circle.fill",
@@ -70,7 +68,6 @@ struct OrderDetailView: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(12)
                 
-                // Order Status
                 VStack(spacing: 12) {
                     Text("Order Status")
                         .font(.headline)

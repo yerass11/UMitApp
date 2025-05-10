@@ -22,7 +22,6 @@ class PharmacySearchViewModel: ObservableObject {
     var filteredMedicines: [Medicine] {
         var filtered = medicines
         
-        // Apply search text filter
         if !searchText.isEmpty {
             filtered = filtered.filter {
                 $0.name.localizedCaseInsensitiveContains(searchText) ||
@@ -30,15 +29,12 @@ class PharmacySearchViewModel: ObservableObject {
             }
         }
         
-        // Apply category filter
         if let category = selectedCategory {
             filtered = filtered.filter { $0.category == category }
         }
         
-        // Apply price range filter
         filtered = filtered.filter { Double($0.points) >= priceRange.lowerBound && Double($0.points) <= priceRange.upperBound }
         
-        // Apply availability filter
         if showOnlyAvailable {
             filtered = filtered.filter { $0.isAvailable ?? true }
         }
@@ -48,7 +44,6 @@ class PharmacySearchViewModel: ObservableObject {
             filtered = filtered.filter { !($0.isPrescriptionRequired ?? false) }
         }
         
-        // Apply sorting
         switch sortOption {
         case .nameAsc:
             filtered.sort { $0.name < $1.name }

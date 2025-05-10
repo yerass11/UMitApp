@@ -18,9 +18,7 @@ final class MedicineOrderService {
                 let orders = docs.compactMap { doc -> MedicineOrder? in
                     let data = doc.data()
                     
-                    // Handle both old and new order formats
                     if let items = data["items"] as? [[String: Any]] {
-                        // New format with multiple items
                         let orderItems = items.compactMap { itemData -> MedicineOrder.OrderItem? in
                             guard let medicineId = itemData["medicineId"] as? String,
                                   let medicineName = itemData["medicineName"] as? String,
@@ -50,7 +48,6 @@ final class MedicineOrderService {
                             timestamp: ts.dateValue()
                         )
                     } else {
-                        // Old format with single item
                         guard let name = data["medicineName"] as? String,
                               let imageURL = data["imageURL"] as? String,
                               let points = data["points"] as? Int,

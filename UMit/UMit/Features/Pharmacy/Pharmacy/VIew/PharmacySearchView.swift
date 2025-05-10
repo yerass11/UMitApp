@@ -14,7 +14,6 @@ struct PharmacySearchView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Search Bar
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
@@ -40,7 +39,6 @@ struct PharmacySearchView: View {
                 .cornerRadius(12)
                 .padding(.horizontal)
                 
-                // Active Filters
                 if searchVM.selectedCategory != nil || searchVM.showOnlyAvailable || searchVM.showOnlyNonPrescription {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -65,7 +63,6 @@ struct PharmacySearchView: View {
                     .padding(.vertical, 8)
                 }
                 
-                // Results
                 ScrollView {
                     LazyVStack(spacing: 12) {
                         if searchVM.filteredMedicines.isEmpty {

@@ -7,7 +7,6 @@ struct FilterView: View {
     var body: some View {
         NavigationView {
             Form {
-                // Category Section
                 Section(header: Text("Category")) {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -29,7 +28,6 @@ struct FilterView: View {
                     }
                 }
                 
-                // Price Range Section
                 Section(header: Text("Price Range")) {
                     VStack {
                         HStack {
@@ -60,17 +58,14 @@ struct FilterView: View {
                     }
                 }
                 
-                // Availability Section
                 Section(header: Text("Availability")) {
                     Toggle("Show Only Available", isOn: $viewModel.showOnlyAvailable)
                 }
                 
-                // Prescription Section
                 Section(header: Text("Prescription")) {
                     Toggle("Show Only Non-Prescription", isOn: $viewModel.showOnlyNonPrescription)
                 }
                 
-                // Sort Section
                 Section(header: Text("Sort By")) {
                     Picker("Sort", selection: $viewModel.sortOption) {
                         ForEach(PharmacySearchViewModel.SortOption.allCases, id: \.self) { option in
@@ -79,7 +74,6 @@ struct FilterView: View {
                     }
                 }
                 
-                // Reset Button
                 Section {
                     Button("Reset Filters") {
                         viewModel.resetFilters()

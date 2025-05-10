@@ -3,7 +3,7 @@ import FirebaseAuth
 
 struct ChatView: View {
     let doctor: ChatDoctor
-    let userId: String  // Firebase UID
+    let userId: String
 
     @State private var messageText: String = ""
     @State private var messages: [ChatMessage] = []
@@ -139,7 +139,6 @@ struct ChatView: View {
 
                             let id = String(dict["id"] as? Int ?? UUID().hashValue)
 
-                            // Парсим timestamp, если он есть
                             var timestamp: Date? = nil
                             if let timestampStr = dict["timestamp"] as? String {
                                 timestamp = ISO8601DateFormatter().date(from: timestampStr)

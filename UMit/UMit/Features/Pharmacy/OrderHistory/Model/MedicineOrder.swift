@@ -19,7 +19,6 @@ struct MedicineOrder: Identifiable {
         }
     }
     
-    // For backward compatibility
     var medicineName: String {
         items.map { "\($0.medicineName) x\($0.quantity)" }.joined(separator: ", ")
     }

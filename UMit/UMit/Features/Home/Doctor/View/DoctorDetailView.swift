@@ -28,7 +28,6 @@ struct DoctorDetailView: View {
             .shadow(radius: 5)
             .padding(.top, 40)
 
-            // Информация о враче
             VStack(spacing: 6) {
                 Text(doctor.fullName)
                     .font(.title2.weight(.bold))
@@ -142,8 +141,6 @@ struct DoctorDetailView: View {
             showTab = false
         }
     }
-
-    // MARK: - Appointment Logic
 
     private func reserveAppointment() {
         guard let userId = viewModel.user?.uid else {

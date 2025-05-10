@@ -44,7 +44,6 @@ final class PharmacyViewModel: ObservableObject {
                     var medicine = try doc.data(as: Medicine.self)
                     print("✅ Successfully decoded medicine: \(medicine.name)")
                     
-                    // Set default values for new properties if they don't exist
                     if medicine.category == nil {
                         medicine.category = .other
                         print("ℹ️ Set default category for \(medicine.name)")
@@ -145,7 +144,7 @@ final class PharmacyViewModel: ObservableObject {
             } else {
                 print("✅ Sample medicines created successfully")
                 print("🔄 Fetching newly created medicines...")
-                self.fetchMedicines() // Fetch the newly created medicines
+                self.fetchMedicines()
             }
         }
     }
