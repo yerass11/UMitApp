@@ -3,11 +3,13 @@ import SwiftUI
 struct PharmacyView: View {
     @EnvironmentObject var viewModel: AuthViewModel
     @StateObject private var pharmacyVM = PharmacyViewModel()
+    @EnvironmentObject var cartVM: CartViewModel
 
     @State private var selectedMedicine: Medicine?
     @State private var showDetail = false
     @State private var showSearch = false
     @State private var showOrders = false
+    @State private var showCart = false
 
     @Binding var showTab: Bool
 
@@ -22,7 +24,7 @@ struct PharmacyView: View {
                                     selectedMedicine = med
                                     showDetail = true
                                 }
-                        }
+                        }   
                     }
                     .padding()
                     .padding(.bottom, 100)
@@ -61,14 +63,40 @@ struct PharmacyView: View {
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showSearch = true
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                            .imageScale(.large)
-                            .foregroundColor(.blue)
+                    HStack {
+                        Button {
+                            showCart = true
+                        } label: {
+                            ZStack {
+                                Image(systemName: "cart")
+                                    .imageScale(.large)
+                                    .foregroundColor(.blue)
+                                
+                                if !cartVM.items.isEmpty {
+                                    Text("\(cartVM.items.count)")
+                                        .font(.caption2)
+                                        .foregroundColor(.white)
+                                        .padding(5)
+                                        .background(Color.red)
+                                        .clipShape(Circle())
+                                        .offset(x: 10, y: -10)
+                                }
+                            }
+                        }
+                        
+                        Button {
+                            showSearch = true
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                                .imageScale(.large)
+                                .foregroundColor(.blue)
+                        }
                     }
                 }
+            }
+            .sheet(isPresented: $showCart) {
+                CartView()
+                    .environmentObject(viewModel)
             }
             .onScrollGeometryChange(for: CGFloat.self, of: { geometry in
                 geometry.contentOffset.y

@@ -6,7 +6,6 @@ import UIKit
 class PaymentViewModel: ObservableObject {
     @Published var paymentSheet: PaymentSheet?
     
-    /// Получает PaymentIntent от backend и создает PaymentSheet с конфигурацией.
     func fetchPaymentIntent(amount: Int, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: "http://127.0.0.1:8000/api/create-payment-intent/") else {
             completion(false)

@@ -169,9 +169,9 @@ struct DoctorDetailView: View {
                 .cornerRadius(14)
         }
     }
-    
-    // MARK: - Logic
-    
+
+    // MARK: - Appointment Logic
+
     private func reserveAppointment() {
         guard let userId = viewModel.user?.uid else {
             reservationError = "You must be logged in to reserve."

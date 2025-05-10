@@ -18,6 +18,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct UMitApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject private var cartVM = CartViewModel()
     
     init() {
         StripeAPI.defaultPublishableKey = "pk_test_51RCgvsCIOnZjCZSg1BjbesSFk0ix0FdamTcaiGXcc9ayRZJRBgOCF6chWThJ4XK2AY13PMtat0FgQrLjMyVSM5bW00E8JGuxSY"
@@ -26,6 +27,7 @@ struct UMitApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(cartVM)
         }
     }
 }
