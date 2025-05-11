@@ -25,7 +25,7 @@ final class AppointmentService {
             } else if let documentId = ref?.documentID {
                 print("📄 New appointment ID: \(documentId)")
                 completion(nil)
-                let url = URL(string: "http://127.0.0.1:8000/api/sessions/")!
+                let url = URL(string: "https://backend-production-d019d.up.railway.app/api/sessions/")!
 
                 var request = URLRequest(url: url)
                 request.httpMethod = "POST"

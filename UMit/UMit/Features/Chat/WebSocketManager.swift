@@ -5,7 +5,7 @@ class WebSocketManager: ObservableObject {
     var onMessageReceived: ((ChatMessage) -> Void)?
     
     func connect(room: String, senderId: String, token: String) {
-        let urlString = "ws://127.0.0.1:8000/ws/chat/\(room)/?token=\(senderId)"
+        let urlString = "wss://backend-production-d019d.up.railway.app/ws/chat/\(room)/?token=\(senderId)"
         guard let url = URL(string: urlString) else {
             print("❌ Invalid WebSocket URL")
             return

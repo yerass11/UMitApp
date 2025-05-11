@@ -43,7 +43,7 @@ final class AuthService {
     }
     
     private func sendUserToBackend(uid: String, email: String, fullName: String) {
-            guard let url = URL(string: "http://127.0.0.1:8000/api/register_firebase_user/") else { return }
+            guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/register_firebase_user/") else { return }
 
             var request = URLRequest(url: url)
             request.httpMethod = "POST"

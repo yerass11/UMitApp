@@ -24,7 +24,7 @@ struct ChatGroup: Identifiable, Codable {
 
 class ChatService {
     static func fetchChats(for userId: String, completion: @escaping ([ChatGroup]) -> Void) {
-        guard let url = URL(string: "http://127.0.0.1:8000/api/chats/\(userId)/") else { return }
+        guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/chats/\(userId)/") else { return }
 
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let data = data {
@@ -38,7 +38,7 @@ class ChatService {
     }
 
     static func saveMessage(roomId: Int, message: ChatMessage) {
-        guard let url = URL(string: "http://127.0.0.1:8000/api/chat/save/") else { return }
+        guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/chat/save/") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

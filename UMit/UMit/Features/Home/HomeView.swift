@@ -317,7 +317,7 @@ struct HomeView: View {
             if let error = error {
                 print("❌ Failed to delete: \(error.localizedDescription)")
             } else {
-                guard let url = URL(string: "http://127.0.0.1:8000/api/sessions/\(appointment.id)/") else {
+                guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/sessions/\(appointment.id)/") else {
                     print("❌ Invalid URL")
                     return
                 }

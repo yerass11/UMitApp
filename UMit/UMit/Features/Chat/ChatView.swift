@@ -130,7 +130,7 @@ struct ChatView: View {
 
     func fetchOrCreateChatGroup() {
         let doctorId = doctor.doctorFirebaseID
-        let urlString = "http://127.0.0.1:8000/api/chat/group/\(userId)/\(doctorId)/"
+        let urlString = "https://backend-production-d019d.up.railway.app/api/chat/group/\(userId)/\(doctorId)/"
 
         guard let url = URL(string: urlString) else { return }
 
@@ -151,7 +151,7 @@ struct ChatView: View {
     func loadMessages() {
         guard let groupId = groupId else { return }
 
-        let urlString = "http://127.0.0.1:8000/api/messages/group/\(groupId)/"
+        let urlString = "https://backend-production-d019d.up.railway.app/api/messages/group/\(groupId)/"
         guard let url = URL(string: urlString) else { return }
 
         URLSession.shared.dataTask(with: url) { data, response, error in

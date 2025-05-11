@@ -4,7 +4,7 @@ class DocumentViewModel: ObservableObject {
     @Published var documents: [Document] = []
 
     func fetchDocuments(for userID: String) {
-        guard let url = URL(string: "http://127.0.0.1:8000/api/documents/\(userID)/") else { return }
+        guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/documents/\(userID)/") else { return }
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
