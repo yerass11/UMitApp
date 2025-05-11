@@ -19,6 +19,7 @@ struct HospitalCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(hospital.name)
                         .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.accent)
 
                     Text(hospital.address)
                         .font(.subheadline)

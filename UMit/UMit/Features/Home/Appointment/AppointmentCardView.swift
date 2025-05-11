@@ -19,7 +19,7 @@ struct AppointmentCardView: View {
             Image(systemName: "calendar")
                 .resizable()
                 .frame(width: 36, height: 36)
-                .foregroundColor(.blue)
+                .foregroundColor(.accent)
                 .padding(10)
                 .background(Color.blue.opacity(0.1))
                 .clipShape(Circle())
@@ -45,7 +45,7 @@ struct AppointmentCardView: View {
             } label: {
                 Image(systemName: "ellipsis")
                     .rotationEffect(.degrees(90))
-                    .padding(.trailing, 4)
+                    .foregroundColor(.accent)
             }
         }
         .padding()

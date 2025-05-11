@@ -82,7 +82,7 @@ struct EditAppointmentView: View {
                 }
                 .padding(.horizontal)
             }
-            .navigationTitle("Edit Appointment")
+            .navigationTitle("Save Appointment")
             .onAppear {
                 fetchBookedSlots()
             }
@@ -107,6 +107,40 @@ struct EditAppointmentView: View {
                 print("✅ Appointment updated!")
                 onSave()
                 dismiss()
+                
+                let url = URL(string: "http://127.0.0.1:8000/api/sessions/\(appointment.id)/")! // backend URL
+
+                var request = URLRequest(url: url)
+                request.httpMethod = "PUT"
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                let isoDate = ISO8601DateFormatter().string(from: dateWithHour)
+
+                let json: [String: Any] = [
+                    "client": appointment.userId,
+                    "medics": appointment.doctorId,
+                    "appointment": isoDate,
+                    "fid": appointment.id
+                ]
+
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: json, options: [])
+                    request.httpBody = jsonData
+                } catch {
+                    return
+                }
+
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                    if let error = error {
+                        return
+                    }
+
+                    guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                        let err = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Server error"])
+                        return
+                    }
+
+                }.resume()
             }
         }
     }

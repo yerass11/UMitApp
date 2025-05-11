@@ -4,8 +4,10 @@ struct DoctorCard: View {
     let doctor: Doctor
     let viewModel: AuthViewModel
 
+    @Binding var showTab: Bool
+
     var body: some View {
-        NavigationLink(destination: DoctorDetailView(doctor: doctor).environmentObject(viewModel)) {
+        NavigationLink(destination: DoctorDetailView(doctor: doctor, showTab: $showTab).environmentObject(viewModel)) {
             HStack(spacing: 16) {
                 AsyncImage(url: URL(string: doctor.imageURL ?? "")) { image in
                     image.resizable()
@@ -18,7 +20,9 @@ struct DoctorCard: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(doctor.fullName)
+                        .multilineTextAlignment(.leading)
                         .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.accent)
                     Text(doctor.specialty)
                         .font(.subheadline)
                         .foregroundColor(.gray)

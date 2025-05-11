@@ -33,7 +33,7 @@ struct AccountTabView: View {
                 Button("Save Changes") {
                     saveChanges()
                 }
-                .foregroundColor(.blue)
+                .foregroundColor(.accent)
             }
         }
         .onAppear {

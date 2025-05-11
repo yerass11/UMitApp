@@ -19,6 +19,7 @@ struct HospitalsListView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(hospital.name)
                                 .font(.headline)
+                                .foregroundColor(.accent)
                             Text(hospital.address)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)

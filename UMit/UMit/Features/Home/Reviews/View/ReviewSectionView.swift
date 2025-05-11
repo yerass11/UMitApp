@@ -6,7 +6,7 @@ struct ReviewsSectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Отзывы")
-                .font(.title2.bold())
+                .font(.title3.bold())
 
             if viewModel.reviews.isEmpty {
                 Text("Пока нет отзывов.")

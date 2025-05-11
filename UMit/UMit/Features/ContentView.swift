@@ -15,9 +15,10 @@ struct ContentView: View {
                         HomeView(viewModel: viewModel, showTab: $showTab)
                             .environmentObject(viewModel)
                     case .message:
-                        HomeView(viewModel: viewModel, showTab: $showTab)
+                        ChatListView(userId: viewModel.user?.uid ?? "", showTab: $showTab)
+                            .environmentObject(viewModel)
                     case .pharmacy:
-                        PharmacyView()
+                        PharmacyView(showTab: $showTab)
                             .environmentObject(viewModel)
                     case .profile:
                         ProfileView()
