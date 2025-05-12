@@ -25,13 +25,14 @@ struct ChatView: View {
                                 if msg.senderId == userId {
                                     Spacer()
                                     Text(msg.content)
-                                        .padding()
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
                                         .background(Color.blue.opacity(0.8))
                                         .foregroundColor(.white)
                                         .cornerRadius(12)
                                 } else {
                                     Text(msg.content)
-                                        .padding()
+                                        .padding(6)
                                         .background(Color.gray.opacity(0.3))
                                         .cornerRadius(12)
                                     Spacer()

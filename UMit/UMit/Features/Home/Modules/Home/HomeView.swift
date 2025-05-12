@@ -22,7 +22,6 @@ struct HomeView: View {
     @Binding var showTab: Bool
 
     var fullName: String? { viewModel.user?.displayName }
-    var address: String = "Islam Karima 70"
 
     enum SearchTab: String, CaseIterable {
         case doctors = "Doctors"
@@ -33,7 +32,6 @@ struct HomeView: View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading) {
-                    addressInfo
                     if showSearchMode {
                         searchTabs
                         filteredSearchResults
@@ -86,20 +84,6 @@ struct HomeView: View {
                 }
             }
         }
-    }
-
-    var addressInfo: some View {
-        HStack {
-            Image(systemName: "location.north.fill")
-                .frame(width: 20, height: 20)
-                .foregroundStyle(.blue)
-
-            Text(address)
-                .font(.system(size: 11, weight: .semibold))
-
-            Spacer()
-        }
-        .padding(.horizontal, 8)
     }
 
     var searchTabs: some View {
@@ -190,13 +174,15 @@ struct HomeView: View {
                 Button {
                     showAllDocuments = true
                 } label: {
-                    Label("Show all", systemImage: "chevron.right")
-                        .labelStyle(.titleAndIcon)
-                        .font(.subheadline)
-                        .foregroundStyle(.accent)
+                    HStack(spacing: 4) {
+                        Text("Show all")
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.accent)
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 6)
 
             ForEach(documentViewModel.documents.prefix(2)) { document in
                 VStack(alignment: .leading, spacing: 8) {

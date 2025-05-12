@@ -33,7 +33,7 @@ struct ContentView: View {
                 }
                 
             } else {
-                LoginView(viewModel: viewModel)
+                AuthView(viewModel: viewModel)
             }
         }
     }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct LoginView: View {
+struct AuthView: View {
     @ObservedObject var viewModel: AuthViewModel
 
     @State private var email: String = ""
@@ -103,5 +103,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView(viewModel: AuthViewModel())
+    AuthView(viewModel: AuthViewModel())
 }

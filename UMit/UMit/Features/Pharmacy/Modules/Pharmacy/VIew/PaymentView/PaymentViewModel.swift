@@ -7,7 +7,7 @@ class PaymentViewModel: ObservableObject {
     @Published var paymentSheet: PaymentSheet?
     
     func fetchPaymentIntent(amount: Int, completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/create-payment-intent/") else {
+        guard let url = URL(string: "http://127.0.0.1:8000/api/create-payment-intent/") else {
             completion(false)
             return
         }
