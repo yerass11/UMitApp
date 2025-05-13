@@ -23,7 +23,6 @@ class ReviewViewModel: ObservableObject {
                 print("Error loading reviews: \(error?.localizedDescription ?? "Unknown error")")
             }
         }
-
     }
 
     func addReview(review: Review, completion: @escaping (Error?) -> Void) {

@@ -7,7 +7,6 @@ class WebSocketManager: ObservableObject {
     func connect(room: String, senderId: String, token: String) {
         let urlString = "wss://backend-production-d019d.up.railway.app/ws/chat/\(room)/?token=\(senderId)"
         guard let url = URL(string: urlString) else {
-            print("❌ Invalid WebSocket URL")
             return
         }
         
@@ -15,7 +14,6 @@ class WebSocketManager: ObservableObject {
         webSocketTask = session.webSocketTask(with: url)
         webSocketTask?.resume()
         
-        print("✅ WebSocket connected to \(url)")
         listen()
     }
     
@@ -28,7 +26,6 @@ class WebSocketManager: ObservableObject {
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: []),
               let jsonString = String(data: jsonData, encoding: .utf8) else {
-            print("❌ Failed to encode message as JSON string")
             return
         }
         
@@ -54,11 +51,11 @@ class WebSocketManager: ObservableObject {
                         self?.handleIncoming(data: data)
                     }
                 @unknown default:
-                    print("❌ Unknown message format")
+                    assertionFailure()
                 }
                 self?.listen()
             case .failure(let error):
-                print("❌ Receive error: \(error)")
+                assertionFailure()
             }
         }
     }
@@ -76,6 +73,5 @@ class WebSocketManager: ObservableObject {
     
     func disconnect() {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
-        print("❌ WebSocket disconnected")
     }
 }
