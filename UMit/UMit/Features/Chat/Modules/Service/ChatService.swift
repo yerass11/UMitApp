@@ -1,55 +1,36 @@
 import Foundation
 
-struct ChatDoctor: Identifiable, Codable {
-    let id: Int
-    let doctorFirebaseID: String
-    let fullName: String
-    let specialty: String
-    let imageURL: String?
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case doctorFirebaseID = "doctor_firebase_id"
-        case fullName = "medic_name"
-        case specialty = "speciality"
-        case imageURL = "medic_image"
-    }
-}
-
-struct ChatGroup: Identifiable, Codable {
-    let id: Int
-    let doctor: ChatDoctor
-}
-
-
 class ChatService {
-    static func fetchChats(for userId: String, completion: @escaping ([ChatGroup]) -> Void) {
-        guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/chats/\(userId)/") else { return }
+    static func fetchChats(for userId: String) async throws -> [ChatGroup] {
+        guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/chats/\(userId)/") else {
+            throw URLError(.badURL)
+        }
 
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            if let data = data {
-                if let decoded = try? JSONDecoder().decode([ChatGroup].self, from: data) {
-                    DispatchQueue.main.async {
-                        completion(decoded)
-                    }
-                }
-            }
-        }.resume()
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode else {
+            throw URLError(.badServerResponse)
+        }
+
+        return try JSONDecoder().decode([ChatGroup].self, from: data)
     }
 
-    static func saveMessage(roomId: Int, message: ChatMessage) {
-        guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/chat/save/") else { return }
+    static func saveMessage(roomId: Int, message: ChatMessage) async throws {
+        guard let url = URL(string: "https://backend-production-d019d.up.railway.app/api/chat/save/") else {
+            throw URLError(.badURL)
+        }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(message)
 
-        let payload: [String: Any] = [
-            "group": roomId,
-            "sender_id": message.senderId,
-            "content": message.content,
-            "timestamp": ""
-        ]
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode else {
+            throw URLError(.badServerResponse)
+        }
     }
 }
+
 

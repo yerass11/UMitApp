@@ -115,18 +115,24 @@ struct ChatView: View {
             print("groupId is nil, message not sent")
             return
         }
-
+        
         let message = ChatMessage(
             id: UUID().uuidString,
             senderId: String(userId),
             content: messageText,
             timestamp: Date()
         )
-
-        socketManager.sendMessage(message: message, receiverId: doctor.doctorFirebaseID ?? "")
+        
+        socketManager.sendMessage(message: message, receiverId: doctor.doctorFirebaseID)
         messageText = ""
-
-        ChatService.saveMessage(roomId: groupId, message: message)
+        
+        Task {
+            do {
+                try await ChatService.saveMessage(roomId: groupId, message: message)
+            } catch {
+                print("❌ Failed to save message: \(error.localizedDescription)")
+            }
+        }
     }
 
     func fetchOrCreateChatGroup() {
