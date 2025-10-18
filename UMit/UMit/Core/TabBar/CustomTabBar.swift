@@ -37,7 +37,7 @@ struct CustomTabBar: View {
                 Spacer()
             }
         }
-        .frame(height: 90)
+        .frame(height: 80)
         .background(Color(.systemGray6), in: .capsule)
         .padding(.horizontal, 10)
     }
